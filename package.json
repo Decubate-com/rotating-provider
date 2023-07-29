@@ -44,6 +44,7 @@
 	"dependencies": {
 		"@clack/prompts": "^0.6.3",
 		"chalk": "^5.2.0",
+		"ethers": "^6.6.7",
 		"execa": "^7.1.1",
 		"git-remote-origin-url": "^4.0.0",
 		"git-url-parse": "^13.1.0",
