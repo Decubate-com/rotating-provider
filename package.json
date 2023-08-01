@@ -26,7 +26,7 @@
 		"format": "prettier \"**/*\" --ignore-unknown",
 		"format:write": "pnpm format --write",
 		"hydrate:test": "node script/hydrate-test-e2e.js",
-		"lint": "eslint . .*js --max-warnings 0 --report-unused-disable-directives",
+		"lint": "eslint . .*js --max-warnings 0 --report-unused-disable-directives --fix",
 		"lint:knip": "knip",
 		"lint:md": "markdownlint \"**/*.md\" \".github/**/*.md\" --rules sentences-per-line",
 		"lint:package": "npmPkgJsonLint .",
@@ -104,6 +104,7 @@
 		"node": ">=18"
 	},
 	"publishConfig": {
-		"provenance": true
+		"provenance": true,
+		"registry": "https://decub8.jfrog.io/artifactory/api/npm/decub8-npm/"
 	}
 }
