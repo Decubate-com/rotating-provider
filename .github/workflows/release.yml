@@ -16,6 +16,7 @@ jobs:
       - env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
+      - run: echo "${{ secrets.DOTNPMRC }}" > .npmrc
       - env:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -40,24 +40,11 @@
 		"*": "prettier --ignore-unknown --write"
 	},
 	"dependencies": {
-		"@clack/prompts": "^0.6.3",
-		"chalk": "^5.2.0",
 		"ethers": "^6.6.7",
-		"execa": "^7.1.1",
-		"git-remote-origin-url": "^4.0.0",
-		"git-url-parse": "^13.1.0",
-		"js-yaml": "^4.1.0",
-		"npm-user": "^5.0.1",
-		"octokit": "^3.0.0",
-		"prettier": "^3.0.0",
-		"replace-in-file": "^7.0.0",
-		"title-case": "^3.0.3"
+		"prettier": "^3.0.0"
 	},
 	"devDependencies": {
-		"@octokit/request-error": "^5.0.0",
 		"@types/eslint": "^8.37.0",
-		"@types/git-url-parse": "^9.0.1",
-		"@types/js-yaml": "^4.0.5",
 		"@types/prettier": "^2.7.2",
 		"@typescript-eslint/eslint-plugin": "^6.0.0",
 		"@typescript-eslint/parser": "^6.0.0",
@@ -80,7 +67,6 @@
 		"eslint-plugin-regexp": "^1.15.0",
 		"eslint-plugin-vitest": "^0.2.2",
 		"eslint-plugin-yml": "^1.7.0",
-		"globby": "^13.1.4",
 		"husky": "^8.0.3",
 		"jsonc-eslint-parser": "^2.3.0",
 		"knip": "2.16.1",
@@ -94,7 +80,6 @@
 		"release-it": "^16.0.0",
 		"sentences-per-line": "^0.2.1",
 		"should-semantic-release": "^0.1.1",
-		"tsx": "^3.12.7",
 		"typescript": "^5.0.4",
 		"vitest": "^0.33.0",
 		"yaml-eslint-parser": "^1.2.2"
