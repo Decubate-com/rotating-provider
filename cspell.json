@@ -3,6 +3,7 @@
 	"ignorePaths": [
 		"./coverage*",
 		".github",
+		"./src/constants",
 		"CHANGELOG.md",
 		"lib",
 		"node_modules",

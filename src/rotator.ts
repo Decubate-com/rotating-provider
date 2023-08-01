@@ -1,66 +1,69 @@
 import { JsonRpcProvider } from "ethers";
 import { EventEmitter } from "events";
 
-export interface ChainProviderMap {
-	[chainId: number]: string[];
-}
+import rpcList from "./constants/rpc.json" assert { type: "json" };
+type ChainProviderMap = Record<string, string[]>;
+const chainList: ChainProviderMap = rpcList;
 
 export class RotatingProvider extends EventEmitter {
-	private readonly chainProviderMap: ChainProviderMap;
 	private readonly chainId: number;
 	private readonly interval: number;
-	private provider: JsonRpcProvider;
+	private intervalId: NodeJS.Timeout | null = null;
+	public provider: JsonRpcProvider;
 
-	constructor(
-		chainProviderMap: ChainProviderMap,
-		interval: number,
-		chainId: number,
-	) {
-		const defaultProvider: string = chainProviderMap[chainId][0];
+	constructor(chainId: number, interval: number) {
+		const defaultProvider: string = chainList[chainId][0];
 		super();
 		this.provider = new JsonRpcProvider(defaultProvider);
-		this.chainProviderMap = chainProviderMap;
 		this.chainId = chainId;
 		this.interval = interval;
+		process.on("beforeExit", () => {
+			this.stopRotation();
+		});
 		this.setupRotation();
 	}
 
+	private getRandomNumber(min: number, max: number): number {
+		return Math.floor(Math.random() * (max - min + 1)) + min;
+	}
+
+	private async rotateProviders() {
+		const providers: string[] = chainList[this.chainId];
+		let randomIndex: number;
+		let nextProvider: string = providers[0]; // Initialize with a default value
+		let isValidProvider = false;
+		let providerToCheck: JsonRpcProvider = new JsonRpcProvider(nextProvider);
+
+		while (!isValidProvider) {
+			randomIndex = this.getRandomNumber(0, providers.length - 1);
+			nextProvider = providers[randomIndex];
+			try {
+				// Create a new provider instance for the current check
+				providerToCheck = new JsonRpcProvider(nextProvider);
+				await providerToCheck.getBlockNumber();
+				isValidProvider = true; // Exit the loop
+			} catch {
+				console.log("Provider is not valid:", nextProvider);
+				providerToCheck.destroy();
+				await new Promise((resolve) => setTimeout(resolve, 1000)); // Add a delay of 1 second before retrying.
+			}
+		}
+
+		this.provider = providerToCheck; // Set the valid provider
+		console.log("Switching to provider:", nextProvider);
+		this.emit("providerChanged", nextProvider);
+	}
+
 	private setupRotation() {
-		setInterval(() => {
-			const providers: string[] = this.chainProviderMap[this.chainId];
-			console.log("Switching to providers:", providers);
-			const nextProvider: string = providers[0]; // Use the first provider in the list
-			this.provider = new JsonRpcProvider(nextProvider);
-			this.emit("providerChanged", nextProvider);
+		this.intervalId = setInterval(() => {
+			void this.rotateProviders();
 		}, this.interval);
 	}
 
-	get currentProvider(): JsonRpcProvider {
-		return this.provider;
+	stopRotation(): void {
+		if (this.intervalId) {
+			clearInterval(this.intervalId);
+			this.intervalId = null;
+		}
 	}
 }
-
-// Example Usage:
-const chainProviderMap: ChainProviderMap = {
-	1: [
-		"https://eth.llamarpc.com",
-		"https://rpc.ankr.com/eth", // Add more RPC URLs for Mainnet
-	],
-	5: [
-		"https://rpc.notadegen.com/goerli",
-		"https://rpc.ankr.com/eth_goerli", // Add more RPC URLs for Ropsten
-	],
-	// ... Add more chain IDs and RPC URLs here
-};
-// Create the rotating provider
-const rotatingProvider = new RotatingProvider(chainProviderMap, 3000, 1);
-
-// You can now use 'rotatingProvider.currentProvider' to access the current provider instance.
-// For example:
-rotatingProvider.currentProvider.getBlockNumber().then((blockNumber) => {
-	console.log("Current block number:", blockNumber);
-});
-
-rotatingProvider.on("providerChanged", (newUrl: string) => {
-	console.log(`Provider changed to: ${newUrl}`);
-});

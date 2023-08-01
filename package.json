@@ -33,10 +33,8 @@
 		"lint:packages": "pnpm dedupe --check",
 		"lint:spelling": "cspell \"**\" \".github/**/*\"",
 		"prepare": "husky install",
-		"setup": "tsx src/setup/index.ts",
-		"setup:test": "node script/setup-test-e2e.js",
 		"should-semantic-release": "should-semantic-release --verbose",
-		"test": "vitest"
+		"test": "node lib/test.js"
 	},
 	"lint-staged": {
 		"*": "prettier --ignore-unknown --write"
