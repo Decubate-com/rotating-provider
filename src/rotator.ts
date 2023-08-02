@@ -1,7 +1,8 @@
 import { JsonRpcProvider, Provider } from "@ethersproject/providers";
 import { EventEmitter } from "events";
 
-import rpcList from "./constants/rpc.json" assert { type: "json" };
+import rpcList from "./constants/rpc.json";
+
 type ChainProviderMap = Record<string, string[]>;
 const chainList: ChainProviderMap = rpcList;
 
