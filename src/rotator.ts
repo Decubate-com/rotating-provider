@@ -1,4 +1,4 @@
-import { JsonRpcProvider, Provider } from "ethers";
+import { JsonRpcProvider, Provider } from "@ethersproject/providers";
 import { EventEmitter } from "events";
 
 import rpcList from "./constants/rpc.json" assert { type: "json" };
@@ -43,8 +43,7 @@ export class RotatingProvider extends EventEmitter {
 				await providerToCheck.getBlockNumber();
 				isValidProvider = true; // Exit the loop
 			} catch {
-				console.log("Provider is not valid:", nextProvider);
-				providerToCheck.destroy();
+				// providerToCheck.destroy();
 				await new Promise((resolve) => setTimeout(resolve, 1000)); // Add a delay of 1 second before retrying.
 			}
 		}
