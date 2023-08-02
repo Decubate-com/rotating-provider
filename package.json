@@ -87,9 +87,5 @@
 	"packageManager": "pnpm@8.6.10",
 	"engines": {
 		"node": ">=18"
-	},
-	"publishConfig": {
-		"provenance": true,
-		"registry": "https://decub8.jfrog.io/artifactory/api/npm/decub8-npm/"
 	}
 }
