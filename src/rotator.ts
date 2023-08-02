@@ -1,4 +1,4 @@
-import { JsonRpcProvider } from "ethers";
+import { JsonRpcProvider, Provider } from "ethers";
 import { EventEmitter } from "events";
 
 import rpcList from "./constants/rpc.json" assert { type: "json" };
@@ -9,7 +9,7 @@ export class RotatingProvider extends EventEmitter {
 	private readonly chainId: number;
 	private readonly interval: number;
 	private intervalId: NodeJS.Timeout | null = null;
-	public provider: JsonRpcProvider;
+	public provider: Provider;
 
 	constructor(chainId: number, interval: number) {
 		const defaultProvider: string = chainList[chainId][0];
