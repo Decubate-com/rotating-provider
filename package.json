@@ -11,7 +11,7 @@
 		"name": "Decubate",
 		"email": "tech@decubate.com"
 	},
-	"type": "module",
+	"type": "commonjs",
 	"main": "./lib/index.js",
 	"bin": "./bin/hydrate.js",
 	"files": [
