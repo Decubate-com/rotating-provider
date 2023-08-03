@@ -13,6 +13,26 @@ function timeout(ms: number) {
 	);
 }
 
+function shuffle<T>(arr: T[]) {
+	let currentIndex = arr.length,
+		randomIndex;
+
+	// While there remain elements to shuffle.
+	while (currentIndex != 0) {
+		// Pick a remaining element.
+		randomIndex = Math.floor(Math.random() * currentIndex);
+		currentIndex--;
+
+		// And swap it with the current element.
+		[arr[currentIndex], arr[randomIndex]] = [
+			arr[randomIndex],
+			arr[currentIndex],
+		];
+	}
+
+	return arr;
+}
+
 export const createProvider = async (chainId: number) => {
 	const providers = chainList[chainId].map((url) => new JsonRpcProvider(url));
 
@@ -26,10 +46,15 @@ export const createProvider = async (chainId: number) => {
 			}
 		}),
 	);
-	const providers_to_use = working
+	const valid_providers = working
 		.filter(([w]) => w)
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		.map(([_, p]) => p) as JsonRpcProvider[];
 
-	return new FallbackProvider(providers_to_use);
+	const final_provider_list = shuffle(valid_providers).slice(
+		0,
+		Math.min(5, valid_providers.length),
+	);
+
+	return new FallbackProvider(final_provider_list);
 };
