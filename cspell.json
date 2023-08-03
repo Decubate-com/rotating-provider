@@ -10,12 +10,14 @@
 		"pnpm-lock.yaml"
 	],
 	"words": [
+		"Aceson",
 		"Codecov",
 		"codespace",
 		"commitlint",
 		"contributorsrc",
 		"conventionalcommits",
 		"Decubate",
+		"ethersproject",
 		"execa",
 		"knip",
 		"lcov",
@@ -26,6 +28,7 @@
 		"packagejson",
 		"quickstart",
 		"Unstaged",
-		"wontfix"
+		"wontfix",
+		"xask"
 	]
 }
