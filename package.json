@@ -1,6 +1,6 @@
 {
 	"name": "rotating-provider",
-	"version": "2.0.7",
+	"version": "2.0.8",
 	"description": "A quickstart-friendly TypeScript template with comprehensive formatting, linting, releases, testing, and other great tooling built-in. ✨",
 	"repository": {
 		"type": "git",
