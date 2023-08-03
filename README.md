@@ -24,7 +24,8 @@
 
 ## Introduction
 
-Rotating Provider is a utility library that helps manage and switch between multiple providers in a decentralized application (dApp) that interacts with multiple blockchain networks. It facilitates the rotation of providers to ensure continuous service availability while handling issues with individual providers.
+Rotating Provider is a utility library that helps manage and switch between multiple providers in a decentralized application (dApp) that interacts with multiple blockchain networks.
+It facilitates the rotation of providers to ensure continuous service availability while handling issues with individual providers.
 
 ## Features
 
