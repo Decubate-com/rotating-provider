@@ -1,20 +1,22 @@
-import { RotatingProvider } from "./rotator.js";
+import { Provider } from "@ethersproject/providers";
+
+import { createProvider } from "./rotator.js";
 
 class TestClass {
-	constructor(public provider: RotatingProvider) {}
+	constructor(public provider: Provider) {}
 }
+async function main() {
+	const rotating = await createProvider(1);
 
-const testClass = new TestClass(new RotatingProvider(1, 5000));
-const provider = testClass.provider.provider;
+	const testClass = new TestClass(rotating);
+	const provider = testClass.provider;
 
-function main() {
 	let counter = 0;
 	// eslint-disable-next-line @typescript-eslint/no-misused-promises
 	setInterval(async () => {
 		const block = await provider.getBlockNumber();
 		counter++;
 		if (counter === 5) {
-			testClass.provider.stopRotation();
 			// eslint-disable-next-line n/no-process-exit
 			process.exit(0);
 		}
@@ -23,4 +25,6 @@ function main() {
 	}, 3000);
 }
 
-main();
+main().catch((err) => {
+	console.error(err);
+});
