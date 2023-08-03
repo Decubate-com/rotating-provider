@@ -13,48 +13,32 @@ function timeout(ms: number) {
 	);
 }
 
-function shuffle<T>(arr: T[]) {
-	let currentIndex = arr.length,
-		randomIndex;
-
-	// While there remain elements to shuffle.
-	while (currentIndex != 0) {
-		// Pick a remaining element.
-		randomIndex = Math.floor(Math.random() * currentIndex);
-		currentIndex--;
-
-		// And swap it with the current element.
-		[arr[currentIndex], arr[randomIndex]] = [
-			arr[randomIndex],
-			arr[currentIndex],
-		];
-	}
-
-	return arr;
-}
-
-export const createProvider = async (chainId: number) => {
+export const createProvider = async (chainId: number, maxProviders = 5) => {
 	const providers = chainList[chainId].map((url) => new JsonRpcProvider(url));
 
-	const working = await Promise.all(
+	const start = +new Date();
+	const checked_providers = await Promise.all(
 		providers.map(async (p) => {
+			let working = true;
 			try {
 				await Promise.race([p.detectNetwork(), timeout(3000)]);
-				return [true, p];
 			} catch {
-				return [false, p];
+				working = false;
 			}
+
+			return { provider: p, time: +new Date() - start, working };
 		}),
 	);
-	const valid_providers = working
-		.filter(([w]) => w)
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		.map(([_, p]) => p) as JsonRpcProvider[];
 
-	const final_provider_list = shuffle(valid_providers).slice(
-		0,
-		Math.min(5, valid_providers.length),
-	);
+	const valid_providers = checked_providers
+		.filter(({ working }) => working)
+		.sort((a, b) => a.time - b.time);
+
+	const max = Math.min(maxProviders, valid_providers.length);
+
+	const final_provider_list = valid_providers
+		.slice(0, max)
+		.map(({ provider }) => provider);
 
 	return new FallbackProvider(final_provider_list);
 };

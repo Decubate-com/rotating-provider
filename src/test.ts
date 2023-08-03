@@ -6,7 +6,7 @@ class TestClass {
 	constructor(public provider: Provider) {}
 }
 async function main() {
-	const rotating = await createProvider(1);
+	const rotating = await createProvider(97);
 
 	const testClass = new TestClass(rotating);
 	const provider = testClass.provider;
