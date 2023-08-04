@@ -1,14 +1,17 @@
 import { Provider } from "@ethersproject/providers";
 
-import { createProvider } from "./rotator.js";
+import { RotatingProvider } from "./rotator.js";
 
 class TestClass {
 	constructor(public provider: Provider) {}
 }
 async function main() {
-	const rotating = await createProvider(97);
+	const rotating = await RotatingProvider.new({
+		chainId: 56,
+		rotateIntervalSeconds: 10,
+	});
 
-	const testClass = new TestClass(rotating);
+	const testClass = new TestClass(rotating.provider);
 	const provider = testClass.provider;
 
 	let counter = 0;
@@ -16,7 +19,7 @@ async function main() {
 	setInterval(async () => {
 		const block = await provider.getBlockNumber();
 		counter++;
-		if (counter === 5) {
+		if (counter === 30) {
 			// eslint-disable-next-line n/no-process-exit
 			process.exit(0);
 		}
