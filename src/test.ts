@@ -1,25 +1,17 @@
-import { Provider } from "@ethersproject/providers";
+import { createFallbackProvider } from "./rotator.js";
 
-import { RotatingProvider } from "./rotator.js";
-
-class TestClass {
-	constructor(public provider: Provider) {}
-}
 async function main() {
-	const rotating = await RotatingProvider.new({
+	const provider = await createFallbackProvider({
 		chainId: 56,
-		rotateIntervalSeconds: 10,
+		rotateIntervalSeconds: 60,
 	});
-
-	const testClass = new TestClass(rotating.provider);
-	const provider = testClass.provider;
 
 	let counter = 0;
 	// eslint-disable-next-line @typescript-eslint/no-misused-promises
 	setInterval(async () => {
 		const block = await provider.getBlockNumber();
 		counter++;
-		if (counter === 30) {
+		if (counter === 10000) {
 			// eslint-disable-next-line n/no-process-exit
 			process.exit(0);
 		}
